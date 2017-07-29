@@ -27431,7 +27431,7 @@ _reactDom2.default.render(_jsx(_reactRedux.Provider, {
   theme: _theme.PrimaryTheme
 }, void 0, _jsx(_app2.default, {}, void 0, _jsx(_views2.default, {})))), document.querySelector('#yield'));
 
-},{"./app":257,"./store":268,"./theme":269,"./views":270,"react":215,"react-dom":48,"react-redux":184,"styled-components":230}],259:[function(require,module,exports){
+},{"./app":257,"./store":270,"./theme":271,"./views":272,"react":215,"react-dom":48,"react-redux":184,"styled-components":230}],259:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27460,15 +27460,18 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 
 var Button = function Button(_ref) {
   var children = _ref.children,
-      className = _ref.className;
+      className = _ref.className,
+      onClick = _ref.onClick;
   return _jsx('button', {
-    className: className
+    className: className,
+    onClick: onClick
   }, void 0, children);
 };
 
 Button.defaultProps = {
   children: null,
-  className: null
+  className: null,
+  onClick: null
 };
 
 exports.default = (0, _styledComponents.withTheme)((0, _styledComponents2.default)(Button)(_templateObject, function (props) {
@@ -27596,7 +27599,7 @@ WelcomeContainer.defaultProps = {
   changeTitle: null
 };
 
-},{"./../components/button":259,"./../components/title":260,"./../data/app/app.actions":262,"./../data/app/app.selectors":265,"prop-types":46,"react":215,"react-redux":184}],262:[function(require,module,exports){
+},{"./../components/button":259,"./../components/title":260,"./../data/app/app.actions":262,"./../data/app/app.selectors":266,"prop-types":46,"react":215,"react-redux":184}],262:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27621,7 +27624,7 @@ var changeTitle = exports.changeTitle = function changeTitle(title) {
   };
 };
 
-},{"./app.helpers":263,"./app.types":266}],263:[function(require,module,exports){
+},{"./app.helpers":263,"./app.types":267}],263:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27632,6 +27635,43 @@ var toUpperCase = exports.toUpperCase = function toUpperCase(text) {
 };
 
 },{}],264:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _app = require('./app.types');
+
+var types = _interopRequireWildcard(_app);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var middlewares = function middlewares(store) {
+  return function (next) {
+    return function (action) {
+      switch (action.type) {
+        case types.CHANGE_TITLE:
+          {
+            next(_extends({}, action, {
+              title: action.title + ' @*#&@*#&'
+            }));
+            break;
+          }
+        default:
+          {
+            next(action);
+          }
+      }
+    };
+  };
+};
+
+exports.default = middlewares;
+
+},{"./app.types":267}],265:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27667,7 +27707,7 @@ function reducer() {
   }
 }
 
-},{"./app.types":266}],265:[function(require,module,exports){
+},{"./app.types":267}],266:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -27680,7 +27720,7 @@ var title = exports.title = function title(state) {
   return app(state).title;
 };
 
-},{}],266:[function(require,module,exports){
+},{}],267:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27688,7 +27728,22 @@ Object.defineProperty(exports, "__esModule", {
 });
 var CHANGE_TITLE = exports.CHANGE_TITLE = '@@APP_NAME/CHANGE_TITLE';
 
-},{}],267:[function(require,module,exports){
+},{}],268:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _app = require('./app/app.middlewares');
+
+var _app2 = _interopRequireDefault(_app);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = [_app2.default];
+
+},{"./app/app.middlewares":264}],269:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27707,13 +27762,12 @@ exports.default = (0, _redux.combineReducers)({
   app: _app2.default
 });
 
-},{"./app/app.reducer":264,"redux":222}],268:[function(require,module,exports){
+},{"./app/app.reducer":265,"redux":222}],270:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.middlewares = undefined;
 
 var _redux = require('redux');
 
@@ -27725,16 +27779,20 @@ var _reducers = require('./data/reducers');
 
 var _reducers2 = _interopRequireDefault(_reducers);
 
+var _middlewares = require('./data/middlewares');
+
+var _middlewares2 = _interopRequireDefault(_middlewares);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var middlewares = exports.middlewares = [_reduxThunk2.default];
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-exports.default = (0, _redux.createStore)(_reducers2.default, (0, _redux.compose)(_redux.applyMiddleware.apply(undefined, middlewares), window.devToolsExtension ? window.devToolsExtension() : function (f) {
+exports.default = (0, _redux.createStore)(_reducers2.default, (0, _redux.compose)(_redux.applyMiddleware.apply(undefined, [_reduxThunk2.default].concat(_toConsumableArray(_middlewares2.default))), window.devToolsExtension ? window.devToolsExtension() : function (f) {
   return f;
 } // for redux chrome extension
 ));
 
-},{"./data/reducers":267,"redux":222,"redux-thunk":216}],269:[function(require,module,exports){
+},{"./data/middlewares":268,"./data/reducers":269,"redux":222,"redux-thunk":216}],271:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27757,7 +27815,7 @@ var DarkerTheme = exports.DarkerTheme = {
   bbg: 'blue'
 };
 
-},{}],270:[function(require,module,exports){
+},{}],272:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

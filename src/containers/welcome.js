@@ -29,12 +29,12 @@ class WelcomeContainer extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   title: selectors.title(state),
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  changeTitle: (title) => dispatch(actions.changeTitle(title)),
+const mapDispatchToProps = dispatch => ({
+  changeTitle: title => dispatch(actions.changeTitle(title)),
 });
 
 export default connect(
