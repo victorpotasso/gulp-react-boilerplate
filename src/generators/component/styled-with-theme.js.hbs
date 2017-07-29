@@ -1,0 +1,18 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled, { withTheme } from 'styled-components';
+
+const {{ properCase name }} = ({ children, className }) =>
+  <div className={className}>{children}</div>;
+
+{{ properCase name }}.propTypes = {
+  children: PropTypes.node,
+};
+
+{{ properCase name }}.defaultProps = {
+  children: null,
+};
+
+export default withTheme(styled({{ properCase name }}) `
+  font-size: 1em;
+`);

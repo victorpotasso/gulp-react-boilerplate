@@ -1,0 +1,15 @@
+import React from 'react';
+import { storiesOf } from '@storybook/react';
+import { ThemeProvider } from 'styled-components';
+
+import theme from './../../theme';
+import {{ properCase name }} from './index';
+
+storiesOf('{{ properCase name }}', module)
+  .add('default', () => (
+    <ThemeProvider theme={theme}>
+      <{{ properCase name }}>
+        {{ properCase name }}
+      </{{ properCase name }}>
+    </ThemeProvider>
+  ));
