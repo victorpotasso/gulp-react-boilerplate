@@ -12,15 +12,17 @@ import {
  */
 export default class CanvasTest extends React.Component {
   componentDidMount() {
-    this.app = new Application(600, 60, {
+    this.app = new Application(window.innerWidth, 60, {
       backgroundColor: 0x1099bb,
       antialias: true,
     });
     this.el.appendChild(this.app.view);
 
-    this.container = new Sprite();
-    this.container.on('click', this.onClick);
-    this.app.stage.addChild(this.container);
+    this.button = new Sprite();
+    this.button.interactive = true;
+    this.button.buttonMode = true;
+    this.button.on('pointerdown', this.onClick);
+    this.app.stage.addChild(this.button);
 
     this.style = new TextStyle({
       fontFamily: 'Arial',
@@ -40,14 +42,16 @@ export default class CanvasTest extends React.Component {
     });
 
     this.richText = new Text(this.props.text, this.style);
-    this.richText.x = 0;
-    this.richText.y = 0;
+    this.richText.x = (this.app.renderer.width - this.richText.width) / 2;
+    this.richText.y = (this.app.renderer.height - this.richText.height) / 2;
 
-    this.container.addChild(this.richText);
+    this.button.addChild(this.richText);
   }
 
   componentWillReceiveProps(nextProps) {
     this.richText.text = nextProps.text;
+    this.richText.x = (this.app.renderer.width - this.richText.width) / 2;
+    this.richText.y = (this.app.renderer.height - this.richText.height) / 2;
   }
 
   onClick() {
