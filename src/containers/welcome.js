@@ -24,6 +24,7 @@ class WelcomeContainer extends React.Component {
       <span>
         <Title>{this.props.title}</Title>
         <Button onClick={this.onClick}>click</Button>
+        {this.props.isLoading && <h3>loading...</h3>}
       </span>
     );
   }
@@ -31,6 +32,7 @@ class WelcomeContainer extends React.Component {
 
 const mapStateToProps = state => ({
   title: selectors.title(state),
+  isLoading: selectors.isLoading(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -44,11 +46,13 @@ export default connect(
 
 WelcomeContainer.propTypes = {
   title: PropTypes.string,
+  isLoading: PropTypes.bool,
   changeTitle: PropTypes.func,
 };
 
 WelcomeContainer.defaultProps = {
   title: null,
+  isLoading: null,
   changeTitle: null,
 };
 

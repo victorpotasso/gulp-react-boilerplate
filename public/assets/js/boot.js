@@ -27548,6 +27548,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var _ref = _jsx('h3', {}, void 0, 'loading...');
+
 var WelcomeContainer = function (_React$Component) {
   _inherits(WelcomeContainer, _React$Component);
 
@@ -27570,7 +27572,7 @@ var WelcomeContainer = function (_React$Component) {
     value: function render() {
       return _jsx('span', {}, void 0, _jsx(_title2.default, {}, void 0, this.props.title), _jsx(_button2.default, {
         onClick: this.onClick
-      }, void 0, 'click'));
+      }, void 0, 'click'), this.props.isLoading && _ref);
     }
   }]);
 
@@ -27579,7 +27581,8 @@ var WelcomeContainer = function (_React$Component) {
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
-    title: selectors.title(state)
+    title: selectors.title(state),
+    isLoading: selectors.isLoading(state)
   };
 };
 
@@ -27596,6 +27599,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 
 WelcomeContainer.defaultProps = {
   title: null,
+  isLoading: null,
   changeTitle: null
 };
 
@@ -27605,7 +27609,7 @@ WelcomeContainer.defaultProps = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.changeTitle = undefined;
+exports.changeTitle = exports.loading = undefined;
 
 var _app = require('./app.types');
 
@@ -27616,6 +27620,12 @@ var _app2 = require('./app.helpers');
 var helpers = _interopRequireWildcard(_app2);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var loading = exports.loading = function loading(isLoading) {
+  return {
+    type: isLoading ? types.LOADING : types.LOADED
+  };
+};
 
 var changeTitle = exports.changeTitle = function changeTitle(title) {
   return {
@@ -27647,17 +27657,27 @@ var _app = require('./app.types');
 
 var types = _interopRequireWildcard(_app);
 
+var _app2 = require('./app.actions');
+
+var actions = _interopRequireWildcard(_app2);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var middlewares = function middlewares(store) {
   return function (next) {
     return function (action) {
+      var dispatch = store.dispatch;
+
       switch (action.type) {
         case types.CHANGE_TITLE:
           {
-            next(_extends({}, action, {
-              title: action.title + ' @*#&@*#&'
-            }));
+            dispatch(actions.loading(true));
+            setTimeout(function () {
+              dispatch(actions.loading(false));
+              next(_extends({}, action, {
+                title: action.title + ' @*#&@*#&'
+              }));
+            }, 1000);
             break;
           }
         default:
@@ -27671,7 +27691,7 @@ var middlewares = function middlewares(store) {
 
 exports.default = middlewares;
 
-},{"./app.types":267}],265:[function(require,module,exports){
+},{"./app.actions":262,"./app.types":267}],265:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27700,6 +27720,18 @@ function reducer() {
           title: action.title
         });
       }
+    case types.LOADING:
+      {
+        return Object.assign({}, state, {
+          isLoading: true
+        });
+      }
+    case types.LOADED:
+      {
+        return Object.assign({}, state, {
+          isLoading: false
+        });
+      }
     default:
       {
         return state;
@@ -27719,6 +27751,9 @@ var app = exports.app = function app(state) {
 var title = exports.title = function title(state) {
   return app(state).title;
 };
+var isLoading = exports.isLoading = function isLoading(state) {
+  return app(state).isLoading;
+};
 
 },{}],267:[function(require,module,exports){
 'use strict';
@@ -27727,6 +27762,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var CHANGE_TITLE = exports.CHANGE_TITLE = '@@APP_NAME/CHANGE_TITLE';
+var LOADING = exports.LOADING = '@@APP_NAME/LOADING';
+var LOADED = exports.LOADED = '@@APP_NAME/LOADED';
 
 },{}],268:[function(require,module,exports){
 'use strict';
