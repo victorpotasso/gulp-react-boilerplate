@@ -27661,23 +27661,32 @@ var _app2 = require('./app.actions');
 
 var actions = _interopRequireWildcard(_app2);
 
+var _app3 = require('./app.selectors');
+
+var selectors = _interopRequireWildcard(_app3);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var middlewares = function middlewares(store) {
   return function (next) {
     return function (action) {
-      var dispatch = store.dispatch;
+      var dispatch = store.dispatch,
+          getState = store.getState;
 
       switch (action.type) {
         case types.CHANGE_TITLE:
           {
-            dispatch(actions.loading(true));
-            setTimeout(function () {
-              dispatch(actions.loading(false));
-              next(_extends({}, action, {
-                title: action.title + ' @*#&@*#&'
-              }));
-            }, 1000);
+            if (selectors.isUpdated(getState())) {
+              window.alert('it`s already updated!');
+            } else {
+              dispatch(actions.loading(true));
+              setTimeout(function () {
+                dispatch(actions.loading(false));
+                next(_extends({}, action, {
+                  title: action.title + ' @*#&@*#&'
+                }));
+              }, 1000);
+            }
             break;
           }
         default:
@@ -27691,7 +27700,7 @@ var middlewares = function middlewares(store) {
 
 exports.default = middlewares;
 
-},{"./app.actions":262,"./app.types":267}],265:[function(require,module,exports){
+},{"./app.actions":262,"./app.selectors":266,"./app.types":267}],265:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27706,7 +27715,8 @@ var types = _interopRequireWildcard(_app);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var initialState = {
-  title: 'App with Redux!'
+  title: 'App with Redux!',
+  isUpdated: false
 };
 
 function reducer() {
@@ -27717,7 +27727,8 @@ function reducer() {
     case types.CHANGE_TITLE:
       {
         return Object.assign({}, state, {
-          title: action.title
+          title: action.title,
+          isUpdated: true
         });
       }
     case types.LOADING:
@@ -27750,6 +27761,9 @@ var app = exports.app = function app(state) {
 };
 var title = exports.title = function title(state) {
   return app(state).title;
+};
+var isUpdated = exports.isUpdated = function isUpdated(state) {
+  return app(state).isUpdated;
 };
 var isLoading = exports.isLoading = function isLoading(state) {
   return app(state).isLoading;

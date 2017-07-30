@@ -2,6 +2,7 @@ import * as types from './app.types';
 
 const initialState = {
   title: 'App with Redux!',
+  isUpdated: false,
 };
 
 export default function reducer(state = initialState, action) {
@@ -12,6 +13,7 @@ export default function reducer(state = initialState, action) {
         state,
         {
           title: action.title,
+          isUpdated: true,
         },
       );
     }
