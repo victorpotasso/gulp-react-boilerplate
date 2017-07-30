@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import Title from './../components/title';
 import Button from './../components/button';
+import CanvasTest from './../components/canvasTest';
 
 import * as selectors from './../data/app/app.selectors';
 import * as actions from './../data/app/app.actions';
@@ -22,6 +23,7 @@ class WelcomeContainer extends React.Component {
   render() {
     return (
       <span>
+        <CanvasTest text={this.props.title} />
         <Title>{this.props.title}</Title>
         <Button onClick={this.onClick}>click</Button>
         {this.props.isLoading && <h3>loading...</h3>}
