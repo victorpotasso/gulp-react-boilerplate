@@ -16,7 +16,6 @@ const jest = require('gulp-jest').default;
 gulp.task('babel', () => {
   const b = browserify({ entries: ['src/boot.js'] }).transform(babelify);
   function bundle() {
-    console.log('>>', plugins());
     b.bundle()
         .on('error', function e(error) {
           const args = Array.prototype.slice.call(arguments);
@@ -25,16 +24,13 @@ gulp.task('babel', () => {
             title: 'Babel Error',
             message: '<%= error.message %>',
           }).apply(this, args);
-
-          console.error(error);
-
           this.emit('end');
         })
         .pipe(source('boot.js'))
         .pipe(buffer())
         .pipe(plugins().sourcemaps.init({ loadMaps: true }))
         .pipe(plugins().sourcemaps.write('.'))
-        .pipe(gulp.dest('public/assets/js'))
+        .pipe(gulp.dest('build/assets/js'))
         .pipe(browserSync.stream());
   }
   bundle();
@@ -52,7 +48,7 @@ gulp.task('jest', () => gulp.src('src').pipe(jest({
       'jsx',
     ],
     transformIgnorePatterns: [
-      '<rootDir>/public/',
+      '<rootDir>/build/',
       '<rootDir>/node_modules/',
       '<rootDir>/src/generators',
     ],
@@ -64,7 +60,7 @@ gulp.task('jest', () => gulp.src('src').pipe(jest({
  */
 gulp.task('public', () => {
   gulp.src(['src/public/**/**'])
-        .pipe(gulp.dest('public'));
+        .pipe(gulp.dest('build'));
 });
 
 /**
@@ -78,7 +74,7 @@ gulp.task('build', ['babel']);
 gulp.task('serve', ['build'], () => {
   browserSync.init({
     server: {
-      baseDir: 'public',
+      baseDir: 'build',
     },
   });
   gulp.watch('src/public/**/**', ['public']).on('change', browserSync.reload);

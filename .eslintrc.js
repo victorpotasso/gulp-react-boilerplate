@@ -66,6 +66,7 @@ module.exports = {
     ],
     "react/jsx-filename-extension": 0,
     "react/jsx-no-target-blank": 0,
+    'react/jsx-boolean-value': ['error', 'never', { always: [] }],
     "react/require-extension": 0,
     "react/self-closing-comp": 0,
     "require-yield": 0,
